@@ -1,127 +1,100 @@
-import {
-  type Student,
-  type Course,
-  type Enrollment,
-  type User,
-} from "../libs/types.ts";
-
-// In-memory "database"
+import { type Student, type Course } from "@libs/types.js";
 export let students: Student[] = [
   {
-    studentId: "680610001",
+    studentId: "650610001",
     firstName: "Matt",
     lastName: "Damon",
     program: "CPE",
+    programId: 101,
   },
   {
-    studentId: "680610002",
+    studentId: "650610002",
     firstName: "Cillian",
     lastName: "Murphy",
     program: "CPE",
-    courses: ["261207", "261497"],
+    programId: 101,
+    courses: [261207, 261497],
   },
   {
-    studentId: "680615003",
+    studentId: "650610003",
     firstName: "Emily",
     lastName: "Blunt",
     program: "ISNE",
-    courses: ["269101", "261497"],
+    programId: 102,
+    courses: [269101, 261497],
+  },
+  {
+    studentId: "680610703",
+    firstName: "Alex",
+    lastName: "Mynce",
+    program: "CPE",
+    programId: 101,
+  },
+  {
+    studentId: "680610704",
+    firstName: "Steve",
+    lastName: "Blokki",
+    program: "CPE",
+    programId: 101,
+  },
+  {
+    studentId: "680610705",
+    firstName: "Sunny",
+    lastName: "Cubii",
+    program: "CPE",
+    programId: 101,
+  },
+  {
+    studentId: "680610728",
+    firstName: "Citron",
+    lastName: "Lemoni",
+    program: "CPE",
+    programId: 101,
+  },
+  {
+    studentId: "680610813",
+    firstName: "Scor",
+    lastName: "Bunny",
+    program: "CPE",
+    programId: 101,
+  },
+  {
+    studentId: "680610814",
+    firstName: "Raboot",
+    lastName: "Bunny",
+    program: "CPE",
+    programId: 101,
+  },
+  {
+    studentId: "680612020",
+    firstName: "Aung",
+    lastName: "Saun",
+    program: "ISNE",
+    programId: 102,
+  },
+    {
+    studentId: "680612025",
+    firstName: "Masat",
+    lastName: "Ernh",
+    program: "ISNE",
+    programId: 102,
   },
 ];
 
 export let courses: Course[] = [
   {
-    courseId: "261207",
+    courseId: 261207,
     courseTitle: "Basic Computer Engineering Lab",
     instructors: ["Dome", "Chanadda"],
   },
   {
-    courseId: "261497",
+    courseId: 261497,
     courseTitle: "Full Stack Development",
     instructors: ["Dome", "Nirand", "Chanadda"],
   },
   {
-    courseId: "269101",
+    courseId: 269101,
     courseTitle: "Introduction to Information Systems and Network Engineering",
-    instructors: ["KENNETH COSH"],
+    instructors: ["Kenneth Cosh"],
   },
 ];
-
-export let enrollments: Enrollment[] = [
-  {
-    studentId: "680610002",
-    courseId: "261207",
-  },
-  {
-    studentId: "680610002",
-    courseId: "261497",
-  },
-  {
-    studentId: "680610003",
-    courseId: "269101",
-  },
-  {
-    studentId: "680615003",
-    courseId: "261497",
-  },
-];
-
-export let users: User[] = [
-  {
-    username: "user1",
-    password: "1234",
-    studentId: "680610001",
-    role: "STUDENT",
-  },
-  {
-    username: "user2",
-    password: "1234",
-    studentId: "680610002",
-    role: "STUDENT",
-  },
-  {
-    username: "user3",
-    password: "1234",
-    studentId: "680615003",
-    role: "STUDENT",
-  },
-  {
-    username: "user4",
-    password: "5678",
-    studentId: null,
-    role: "ADMIN",
-  },
-];
-
-export const DB = {
-  students,
-  courses,
-  enrollments,
-  users,
-};
-
-// For resetting the database to its original state
-const org_users = structuredClone(users);
-const org_students = structuredClone(students);
-const org_courses = structuredClone(courses);
-const org_enrollments = structuredClone(enrollments);
-
-export function reset_db() {
-  users = structuredClone(org_users);
-  students = structuredClone(org_students);
-  courses = structuredClone(org_courses);
-  enrollments = structuredClone(org_enrollments);
-}
-
-export function reset_users() {
-  users = structuredClone(org_users);
-}
-export function reset_students() {
-  students = structuredClone(org_students);
-}
-export function reset_courses() {
-  courses = structuredClone(org_courses);
-}
-export function reset_enrollments() {
-  enrollments = structuredClone(org_enrollments);
-}

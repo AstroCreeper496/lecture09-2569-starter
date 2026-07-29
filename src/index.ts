@@ -1,55 +1,204 @@
-import express, { type Request, type Response } from "express";
+import express, { type Request, type Response } from 'express';
 
-// import middlewares
+// import middleware
 import morgan from "morgan";
-import invalidJsonMiddleware from "./middlewares/invalidJsonMiddleware.ts";
-import notFoundMiddleware from "./middlewares/notFoundMiddleware.ts";
 
-// import routes
-import userAuthentication_v2 from  "./routes/userRoutes.ts";
-import studentRouter_v2 from "./routes/studentsRoutes_v2.ts";
-import studentRouter_v3 from "./routes/studentsRoutes_v3.ts";
-import courseRouter_v2 from "./routes/coursesRouters_v2.ts";
-import enrollmentRouters_v2 from "./routes/enrollmentRouters_v2.ts";
+// import database
+import { students } from '@db/db.js';
+import { type Student, type Course } from "@libs/types.js";
+import {
+  zStudentDeleteBody,
+  zStudentPostBody,
+  zStudentPutBody,
+} from "@libs/studentValidator.js";
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
-// body parser middleware
-app.use(express.json());
-
-// logger middleware
-app.use(morgan("dev"));
-// app.use(morgan("combined"));
-
-// JSON parser middleware
-app.use(invalidJsonMiddleware);
+// use middleware
+app.use(morgan("dev", { immediate: false }));
+app.use(express.json());    // parses request's payload into 'req.body'
 
 // Endpoints
 app.get("/", (req: Request, res: Response) => {
-  res.send("Lecture09 API services");
+  res.send("API services for Student Data");
 });
 
-app.use("/api/v2/users",userAuthentication_v2);
-app.use("/api/v2/students", studentRouter_v2);
-app.use("/api/v3/students", studentRouter_v3);
-app.use("/api/v2/courses", courseRouter_v2);
-app.use("/api/v2/enrollments", enrollmentRouters_v2);
+// GET /students
+// get students (by program)
+app.get("/api/students", (req: Request, res: Response) => {
+  try {
+    const program = req.query.program;
+    const studentId = req.query.studentId;
+    let filtered_students = students;
+    if (studentId) {
+      filtered_students = filtered_students.filter(
+        (student) => student.studentId === studentId
+      );
+    }if (program) {
+      filtered_students = filtered_students.filter(
+        (student) => student.program === program
+      );
+      return res.json({
+        success: true,
+        data: filtered_students,
+      });
+    } else {
+      return res.json({
+        success: true,
+        count: students.length,
+        data: students,
+      });
+    }
+  } catch (err) {
+    return res.json({
+      success: false,
+      message: "Something is wrong, please try again",
+      error: err,
+    });
+  }
+});
+
+// POST /students, body = {new student data}
+// add a new student
+app.post("/api/students", (req: Request, res: Response) => {
+  try {
+    const body = req.body as Student;
+
+    // validate req.body with predefined validator
+    const result = zStudentPostBody.safeParse(body); // check zod
+    if (!result.success) {
+      return res.json({
+        message: "Validation failed",
+        errors: result.error.issues[0]?.message,
+      });
+    }
+
+    //check duplicate studentId
+    const found = students.find(
+      (student) => student.studentId === body.studentId
+    );
+    if (found) {
+      return res.json({
+        success: false,
+        message: "Student is already exists",
+      });
+    }
+
+    // add new student
+    const new_student = body;
+    students.push(new_student);
+
+    // add response header 'Link'
+    res.set("Link", `/students/${new_student.studentId}`);
+
+    return res.json({
+      success: true,
+      data: new_student,
+    });
+    // return res.json({ ok: true, message: "successfully" });
+  } catch (err) {
+    return res.json({
+      success: false,
+      message: "Somthing is wrong, please try again",
+      error: err,
+    });
+  }
+});
+
+// PUT /students, body = {studentId}
+// Update specified student
+app.put("/api/students", (req: Request, res: Response) => {
+  try {
+    const body = req.body as Student;
+
+    // validate req.body with predefined validator
+    const result = zStudentPutBody.safeParse(body); // check zod
+    if (!result.success) {
+      return res.json({
+        message: "Validation failed",
+        errors: result.error.issues[0]?.message,
+      });
+    }
+
+    //check duplicate studentId
+    const foundIndex = students.findIndex(
+      (student) => student.studentId === body.studentId
+    );
+
+    if (foundIndex === -1) {
+      return res.json({
+        success: false,
+        message: "Student does not exists",
+      });
+    }
+
+    // update student data
+    students[foundIndex] = { ...students[foundIndex], ...body };
+
+    // add response header 'Link'
+    res.set("Link", `/students/${body.studentId}`);
+
+    return res.json({
+      success: true,
+      message: `Student ${body.studentId} has been updated successfully`,
+      data: students[foundIndex],
+    });
+  } catch (err) {
+    return res.json({
+      success: false,
+      message: "Somthing is wrong, please try again",
+      error: err,
+    });
+  }
+});
+
+// DELETE /students, body = {studentId}
+app.delete('/api/students', (req: Request, res: Response) => {
+  try {
+    const studentId = req.query.studentId as string;
+
+    if (!studentId || studentId.length !== 9) {
+      return res.status(400).json({
+        ok: false,
+        message: "Student ID must contain 9 characters",
+      });
+    }
+
+    const index = students.findIndex((s) => s.studentId === studentId);
+
+    if (index === -1) {
+      return res.status(404).json({
+        ok: false,
+        message: "Student ID " + studentId + " does not exist",
+      });
+    }
+
+    students.splice(index, 1);
+
+    return res.json({
+      ok: true,
+      message: "Student ID " + studentId + " has been deleted",
+    });
+  } catch (err) {
+    return res.json({
+      success: false,
+      message: "Something is wrong, please try again",
+      error: err,
+    });
+  }
+});
 
 app.get("/api/me", (req: Request, res: Response) => {
   res.send({
-    "success" : true,
-    "message": "Student Information",
-    "data": {studentId:"680610729",firstName:"Suthanakit",lastName:"Wongsrichan","program":"CPE","section":"001"}
-  });
+      ok: true,
+      fullName: "Suthanakit Wongsrichan",
+      studentId: "680610729"
+    });
 });
 
-// endpoint check middleware
-app.use(notFoundMiddleware);
-
-app.listen(port, () => {
+app.listen(port, async () => {
   console.log(`🚀 Server running on http://localhost:${port}`);
 });
 
-// Export app for vercel deployment
 export default app;
