@@ -8,6 +8,9 @@
     "build": "tsc && tsc-alias",
     "start": "node ./dist/src/index.js"
   },
+  "engines": {
+    "node": "24.x"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
