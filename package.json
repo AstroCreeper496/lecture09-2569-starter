@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "engines": {
-    "node": "24.x"
+    "node": "22.x"
   },
   "scripts": {
     "dev": "nodemon",
@@ -36,7 +36,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@tsconfig/node-lts": "^24.0.0",
+    "@tsconfig/node-lts": "^22.0.0",
     "@tsconfig/node-ts": "^23.6.4",
     "@types/bcrypt": "^6.0.0",
     "@types/cors": "^2.8.19",
