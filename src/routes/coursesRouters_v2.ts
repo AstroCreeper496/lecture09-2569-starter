@@ -10,17 +10,20 @@ import type { Student, Course } from "../libs/types.ts";
 // import database
 import { courses } from "../db/db.ts";
 
+import token from "jsonwebtoken";
+
 const router = Router();
 
 // GET /api/v2/courses
 router.get("/", (req: Request, res: Response) => {
   try {
-    return res.json({
+    return res.status(200).json({
       success: true,
       data: courses,
+      token: token
     });
   } catch (err) {
-    return res.status(200).json({
+    return res.status(500).json({
       success: false,
       message: "Something is wrong, please try again",
       error: err,

@@ -68,25 +68,25 @@ export let enrollments: Enrollment[] = [
 
 export let users: User[] = [
   {
-    username: "user1@abc.com",
+    username: "user1",
     password: "1234",
     studentId: "680610001",
     role: "STUDENT",
   },
   {
-    username: "user2@abc.com",
+    username: "user2",
     password: "1234",
     studentId: "680610002",
     role: "STUDENT",
   },
   {
-    username: "user3@abc.com",
+    username: "user3",
     password: "1234",
     studentId: "680615003",
     role: "STUDENT",
   },
   {
-    username: "user4@abc.com",
+    username: "user4",
     password: "5678",
     studentId: null,
     role: "ADMIN",

@@ -59,3 +59,12 @@ export const zEnrollmentBody = z.object({
   studentId: zStudentId,
   courseId: zCourseId,
 });
+
+export const zEnrollmentEditBody = z.object({
+  courseId: zCourseId,
+});
+
+////// Verification Validators ////// 
+export const zVerificationBody = z.object({
+  token: z.string()
+});
