@@ -1,12 +1,12 @@
-# Lab 07 - Student API (API #1)
+# Lab 09 - Student API (API #3)
 
 ### ป้อนข้อมูลนักศึกษา
 
-รหัส นศ.:
+รหัส นศ.: 680610729
 
-ชื่อ-สกุล :
+ชื่อ-สกุล : Suthanakit Wongsrichan
 
-Vercel URL : 
+Vercel URL : lecture09-2569-starter-gold.vercel.app
 
 ---
 
@@ -19,8 +19,6 @@ pnpm run dev
 
 ให้นักศึกษาสร้างระบบ API สำหรับจัดการข้อมูลนักศึกษาอย่างง่าย โดยใช้ความรู้เรื่องการพัฒนา RESTFul API ด้วย Express + TypeScript
 
-กรอก Github Repo URL และ Vercel URL ของ นศ. ลงใน Spreadsheet ต่อไปนี้
-
-[คลิกเพื่อเปิด Spreadsheet](https://docs.google.com/spreadsheets/d/1spJejV7izRS3AtCi4UTHscLe1C3cos6TrOBVJ4hdrmU/edit?usp=sharing)
+กรอก Github Repo URL และ Vercel URL ของ นศ. ลงใน Spreadsheet
 
 ---
