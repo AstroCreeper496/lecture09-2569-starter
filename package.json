@@ -8,7 +8,6 @@
   },
   "scripts": {
     "dev": "nodemon",
-    "build": "tsc && tsc-alias",
     "start": "node ./dist/src/index.js"
   },
   "keywords": [],
